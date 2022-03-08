@@ -2,6 +2,7 @@
 
 TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 export AWS_DEFAULT_REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" -v http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d \" -f4)
+yq -i ".Region=\"${REGION}\"" test.yaml
 echo "creating cluster-config.yaml file"
 source home/ubuntu/apc-ve/bin/activate
 echo "Activated Virtual Environment"
@@ -17,7 +18,6 @@ sed -i '1 i\Tags:' valid.yaml
 yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml test.yaml >> test1.yaml
 echo "valid.yaml file and cluster-config.yaml file is merged into cluster-config1.yaml"
 echo "Modified cluster-config1.yaml with Tags"
-yq -i '.Region=$REGION' test1.yaml
 source home/ubuntu/apc-ve/bin/activate
 echo "Virtual Environmement Activated"
 echo "creating Cluster with updated cluster-config1.yaml"
