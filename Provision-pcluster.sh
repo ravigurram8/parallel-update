@@ -18,11 +18,11 @@ echo "valid.json file is updated with Tags"
 yq eval -P valid.json > valid.yaml
 echo "Json file is converted to yaml"
 sed -i '1 i\Tags:' valid.yaml
-yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml cluster-config.yaml >> cluster-config1.yaml
+yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml test.yaml >> test1.yaml
 echo "valid.yaml file and cluster-config.yaml file is merged into cluster-config1.yaml"
 echo "Modified cluster-config1.yaml with Tags"
 source ./apc-ve/bin/activate
 echo "Virtual Environmement Activated"
 echo "creating Cluster with updated cluster-config1.yaml"
-pcluster create-cluster --cluster-name test-cluster${RANDOM:0:1} --cluster-configuration cluster-config1.yaml
+pcluster create-cluster --cluster-name test-cluster${RANDOM:0:1} --cluster-configuration test1.yaml
 echo "Success"
