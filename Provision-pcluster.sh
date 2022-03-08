@@ -5,10 +5,6 @@ export AWS_DEFAULT_REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" -v htt
 echo "creating cluster-config.yaml file"
 source ./apc-ve/bin/activate
 echo "Activated Virtual Environment"
-pcluster configure --config cluster-config.yaml
-echo "Successfully Created Cluster-config.yaml in the present directory"
-
-
 echo "Retrieving Tags from Running Instance"
 INSTANCE_ID=`wget -qO- http://instance-data/latest/meta-data/instance-id`
 REGION=`wget -qO- http://instance-data/latest/meta-data/placement/availability-zone | sed 's/.$//'`
