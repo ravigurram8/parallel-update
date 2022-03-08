@@ -1,4 +1,4 @@
-Region: ap-southeast-1
+Region:
 Image:
   Os: alinux2
 HeadNode:
