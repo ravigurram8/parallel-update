@@ -1,0 +1,25 @@
+Region: ap-southeast-1
+Image:
+  Os: alinux2
+HeadNode:
+  InstanceType: t2.micro
+  Networking:
+    SubnetId: subnet-0c7df6eed9fb5b893
+  Ssh:
+    KeyName: hpc_singapore
+  Imds:
+    Secured: false
+Scheduling:
+  Scheduler: awsbatch
+  AwsBatchQueues:
+    - Name: queue1
+      ComputeResources:
+        - Name: optimal
+          InstanceTypes:
+            - optimal
+          MinvCpus: 0
+          DesiredvCpus: 0
+          MaxvCpus: 10
+      Networking:
+        SubnetIds:
+          - subnet-0fd3bda8182f7f359
