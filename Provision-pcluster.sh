@@ -3,7 +3,7 @@
 TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 export AWS_DEFAULT_REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" -v http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d \" -f4)
 echo "creating cluster-config.yaml file"
-source ./apc-ve/bin/activate
+source home/ubuntu/apc-ve/bin/activate
 echo "Activated Virtual Environment"
 echo "Retrieving Tags from Running Instance"
 INSTANCE_ID=`wget -qO- http://instance-data/latest/meta-data/instance-id`
@@ -18,7 +18,7 @@ yq -i '.Region=$REGION' test.yaml
 yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml test.yaml >> test1.yaml
 echo "valid.yaml file and cluster-config.yaml file is merged into cluster-config1.yaml"
 echo "Modified cluster-config1.yaml with Tags"
-source ./apc-ve/bin/activate
+source home/ubuntu/apc-ve/bin/activate
 echo "Virtual Environmement Activated"
 echo "creating Cluster with updated cluster-config1.yaml"
 pcluster create-cluster --cluster-name test-cluster${RANDOM:0:1} --cluster-configuration test1.yaml
