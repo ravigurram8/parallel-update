@@ -22,6 +22,7 @@ if [ "$scheduler" == "slurm" ]; then
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MinCount=\"$minvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MaxCount=\"$maxvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" slurm.yaml
+       sed 's/\"//g' slurm.yaml
        echo "updated slurm.yaml"
 else
        echo "batch.yaml exists"
@@ -34,5 +35,6 @@ else
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MaxvCpus=\"$maxvpc\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].DesiredvCpus=\"$desiredvpc\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" batch.yaml
+       sed 's/\"//g' batch.yaml
        echo "updated batch.yaml"
 fi
