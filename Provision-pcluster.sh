@@ -11,6 +11,7 @@ computenodeinstancetype=$6
 minvpc=$7
 maxvpc=$8
 computenodesubnetId=$9
+desiredvpc=$10
 if [ "$scheduler" == "slurm" ]; then
        echo "slurm.yaml exists"
        yq -i ".Region=\"$Region\"" slurm.yaml
@@ -31,6 +32,7 @@ else
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].InstanceTypes[0]=\"$computenodeinstancetype\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MinvCpus=\"$minvpc\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MaxvCpus=\"$maxvpc\"" batch.yaml
+       yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].DesiredvCpus=\"$desiredvpc\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" batch.yaml
        echo "updated batch.yaml"
 fi
