@@ -11,7 +11,7 @@ computenodeinstancetype=$6
 minvpc=$7
 maxvpc=$8
 computenodesubnetId=$9
-desiredvpc=$0
+desiredvpc=${10}
 if [ "$scheduler" == "slurm" ]; then
        echo "slurm.yaml exists"
        yq -i ".Region=\"$Region\"" slurm.yaml
