@@ -25,5 +25,10 @@ if [ "$scheduler" == "slurm" ]; then
 else
        echo "batch.yaml exists"
        yq -i ".Region=\"$Region\"" batch.yaml
+       yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" batch.yaml
+       yq -i ".HeadNode.Networking.SubnetId=\"$headnodesubnetId\"" batch.yaml
+       yq -i ".HeadNode.Ssh.KeyName=\"$keyname\"" batch.yaml
+       
+       
        echo "updated Region in batch.yaml"
 fi
