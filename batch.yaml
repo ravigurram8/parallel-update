@@ -2,11 +2,11 @@ Region:
 Image:
   Os: alinux2
 HeadNode:
-  InstanceType: t2.micro
+  InstanceType: 
   Networking:
-    SubnetId: subnet-0c7df6eed9fb5b893
+    SubnetId: 
   Ssh:
-    KeyName: hpc_singapore
+    KeyName: 
   Imds:
     Secured: false
 Scheduling:
@@ -16,10 +16,10 @@ Scheduling:
       ComputeResources:
         - Name: optimal
           InstanceTypes:
-            - optimal
-          MinvCpus: 0
-          DesiredvCpus: 0
-          MaxvCpus: 10
+            - 
+          MinvCpus: 
+          DesiredvCpus: 
+          MaxvCpus: 
       Networking:
         SubnetIds:
-          - subnet-0fd3bda8182f7f359
+          - 
