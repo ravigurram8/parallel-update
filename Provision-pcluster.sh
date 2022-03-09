@@ -21,14 +21,16 @@ if [ "$scheduler" == "slurm" ]; then
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MinCount=\"$minvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MaxCount=\"$maxvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" slurm.yaml
-       echo "updated Region in slurm.yaml"
+       echo "updated slurm.yaml"
 else
        echo "batch.yaml exists"
        yq -i ".Region=\"$Region\"" batch.yaml
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" batch.yaml
        yq -i ".HeadNode.Networking.SubnetId=\"$headnodesubnetId\"" batch.yaml
        yq -i ".HeadNode.Ssh.KeyName=\"$keyname\"" batch.yaml
-       
-       
-       echo "updated Region in batch.yaml"
+       yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].InstanceTypes[0]=\"$computenodeinstancetype\"" batch.yaml
+       yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MinvCpus=\"$minvpc\"" batch.yaml
+       yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MaxvCpus=\"$maxvpc\"" batch.yaml
+       yq -i ".Scheduling.AwsBatchQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" batch.yaml
+       echo "updated batch.yaml"
 fi
