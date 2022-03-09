@@ -1,0 +1,21 @@
+Region: 
+Image:
+  Os: alinux2
+HeadNode:
+  InstanceType: 
+  Networking:
+    SubnetId: 
+  Ssh:
+    KeyName: 
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+  - Name: queue1
+    ComputeResources:
+    - Name: t2micro
+      InstanceType: 
+      MinCount: 
+      MaxCount: 
+    Networking:
+      SubnetIds:
+      - 
