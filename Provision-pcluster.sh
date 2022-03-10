@@ -20,8 +20,7 @@ minvpc=$7
 maxvpc=$8
 computenodesubnetId=$9
 desiredvpc=${10}
-spot=${11}
-spotbid=${13}
+spotbid=${11}
 if [ "$scheduler" == "slurm" ]; then
        echo "slurm.yaml exists"
        yq -i ".Region=\"$Region\"" slurm.yaml
@@ -31,7 +30,6 @@ if [ "$scheduler" == "slurm" ]; then
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].InstanceType=\"$computenodeinstancetype\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MinCount=\"$minvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MaxCount=\"$maxvpc\"" slurm.yaml
-       yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].SpotPrice=\"$spot\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" slurm.yaml
        sed -i 's/\"//g' slurm.yaml
        yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml slurm.yaml >> cluster-config-slurm.yaml
