@@ -11,11 +11,13 @@ Scheduling:
   Scheduler: slurm
   SlurmQueues:
   - Name: queue1
+    CapacityType: SPOT
     ComputeResources:
     - Name: t2micro
       InstanceType: 
       MinCount: 
-      MaxCount: 
+      MaxCount:
+      SpotPrice:
     Networking:
       SubnetIds:
       - 
