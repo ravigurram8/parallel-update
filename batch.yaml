@@ -13,6 +13,7 @@ Scheduling:
   Scheduler: awsbatch
   AwsBatchQueues:
     - Name: queue1
+      CapacityType: SPOT
       ComputeResources:
         - Name: optimal
           InstanceTypes:
@@ -20,6 +21,7 @@ Scheduling:
           MinvCpus: 
           DesiredvCpus: 
           MaxvCpus: 
+          SpotBidPercentage:
       Networking:
         SubnetIds:
         - 
