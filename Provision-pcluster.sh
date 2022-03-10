@@ -30,7 +30,7 @@ if [ "$scheduler" == "slurm" ]; then
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MinCount=\"$minvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MaxCount=\"$maxvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" slurm.yaml
-       sed 's/\"//g' slurm.yaml
+       sed -i 's/\"//g' slurm.yaml
        yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml slurm.yaml >> cluster-config-slurm.yaml
        echo "valid.yaml file and cluster-config.yaml file is merged into cluster-config-slurm.yaml"
        echo "Modified cluster-config-slurm.yaml with Tags"
@@ -46,7 +46,7 @@ else
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MaxvCpus=\"$maxvpc\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].DesiredvCpus=\"$desiredvpc\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].Networking.SubnetIds[0]=\"$computenodesubnetId\"" batch.yaml
-       sed 's/\"//g' batch.yaml
+       sed -i 's/\"//g' batch.yaml
        yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml batch.yaml >> cluster-config-batch.yaml
        echo "valid.yaml file and cluster-config.yaml file is merged into cluster-config-batch.yaml"
        echo "Modified cluster-config-batch.yaml with Tags"
