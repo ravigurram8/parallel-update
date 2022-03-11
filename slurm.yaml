@@ -17,7 +17,6 @@ Scheduling:
       InstanceType: 
       MinCount: 
       MaxCount:
-      SpotPrice:
     Networking:
       SubnetIds:
       - 
