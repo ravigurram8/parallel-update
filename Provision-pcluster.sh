@@ -55,3 +55,4 @@ else
        pcluster create-cluster --cluster-name test-cluster-$scheduler --cluster-configuration cluster-config-batch.yaml
        
 fi
+pcluster describe-cluster -n test-cluster-$scheduler 
