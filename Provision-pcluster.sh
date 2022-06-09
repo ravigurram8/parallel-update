@@ -55,4 +55,6 @@ else
        pcluster create-cluster --cluster-name test-cluster-$scheduler --cluster-configuration cluster-config-batch.yaml
        
 fi
-pcluster describe-cluster -n test-cluster-$scheduler 
+source ./wait_stack_create.sh
+wait_stack_create test-cluster-$scheduler $Region
+
