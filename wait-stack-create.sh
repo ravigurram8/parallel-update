@@ -24,7 +24,7 @@ wait_stack_create() {
        PARAMETER_NAME="/RL/RG/StandardCatalog/ParallelCluster-test/${STACK_NAME}"
         aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${instance_id}"
         echo "Instance id of the head node is stored on ${PARAMETER_NAME}"
-        echo "Instance id address is : ${INSTANCE_ID}"
+        echo "Instance id is : ${INSTANCE_ID}"
 
     fi
     return
