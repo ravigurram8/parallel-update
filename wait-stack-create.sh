@@ -19,11 +19,13 @@ wait_stack_create() {
         exit ${status}
         else
         
-       PRIVATE_IP_ADDRESS=`pcluster describe-cluster -n $1 --query headNode.privateIpAddress`
+       INSTANCE_ID=`pcluster describe-cluster -n $1 --query headNode.instanceId`
+      # PRIVATE_IP_ADDRESS=`pcluster describe-cluster -n $1 --query headNode.privateIpAddress`
        PARAMETER_NAME="/RL/RG/StandardCatalog/ParallelCluster-test/${STACK_NAME}"
-        aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${PRIVATE_IP_ADDRESS}"
+        aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${instance_id}"
         echo "private ip address of the head node is stored on ${PARAMETER_NAME}"
-        echo "Private ip address is : ${PRIVATE_IP_ADDRESS}"
+        echo "Private ip address is : ${INSTANCE_ID}"
+
     fi
     return
 }
