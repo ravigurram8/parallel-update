@@ -12,7 +12,7 @@ wait_stack_create() {
     if [[ ${status} -ne 0 ]] ; then
         # Waiter encountered a failure state.
         echo "Stack [${STACK_NAME}] creation failed. AWS error code is ${status}."
-        trap '/opt/aws/bin/cfn-signal --exit-code 1 --resource EC2Instance --region REGION --stack ${PARANT_STACK}' ERR
+        trap '/opt/aws/bin/cfn-signal --exit-code 1 --resource RstudioEC2Instance --region ${AWS::Region} --stack ${AWS::StackName}' ERR
         exit 1
     else        
        INSTANCE_ID=`pcluster describe-cluster -n $1 --query headNode.instanceId`
