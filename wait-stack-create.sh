@@ -3,7 +3,7 @@
 wait_stack_create() {
     STACK_NAME=$1
     REGION=$2
-    PARANT_STACK=$3
+   
 
     echo "Waiting for [$STACK_NAME] stack creation."
     aws cloudformation wait stack-create-complete --region ${REGION} --stack-name ${STACK_NAME}
