@@ -21,7 +21,7 @@ wait_stack_create() {
        aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${INSTANCE_ID}"
        echo "Instance id of the head node is stored on ${PARAMETER_NAME}"
        echo "Instance id is : ${INSTANCE_ID}"
-       
+       /opt/aws/bin/cfn-signal --exit-code 0 --resource EC2Instance --region ${AWS::Region} --stack ${AWS::StackName}
     fi
     exit 0
 }
