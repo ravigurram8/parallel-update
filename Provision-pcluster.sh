@@ -1,8 +1,22 @@
 #!/bin/bash
+function wait_stack_create() {
+    STACK_NAME=$1
+    REGION=$2
+    echo "Waiting for [$STACK_NAME] stack creation."
+    aws cloudformation wait stack-create-complete --region ${REGION} --stack-name ${STACK_NAME}
+    status=$?
+    if [[ ${status} -ne 0 ]] ; then
+        # Waiter encountered a failure state.
+        echo "Stack [${STACK_NAME}] creation failed. AWS error code is ${status}."
+        /opt/aws/bin/cfn-signal --exit-code 1 --resource EC2Instance --region ${AWS::Region} --stack ${AWS::StackName}   
+    fi
+}
 source ~/apc-ve/bin/activate
 echo "Activated Virtual Environment"
 echo "Retrieving Tags from Running Instance"
 INSTANCE_ID=`wget -qO- http://instance-data/latest/meta-data/instance-id`
+IFS='-' read -ra TRIMMED <<< "$INSTANCE_ID"
+CLUSTER_NAME=RG-Pcluster-${TRIMMED[1]}
 REGION=`wget -qO- http://instance-data/latest/meta-data/placement/availability-zone | sed 's/.$//'`
 aws ec2 describe-tags --region $REGION --filter "Name=resource-id,Values=$INSTANCE_ID" --query 'Tags[*].{Key:Key,Value:Value}' | jq -r '.[] | select( .Key as $a | ["cost_resource", "project_name","researcher_name"] | index($a) )' >> out.json
 jq -s '.' out.json >> valid.json
@@ -35,7 +49,7 @@ if [ "$scheduler" == "slurm" ]; then
        yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml slurm.yaml >> cluster-config-slurm.yaml
        echo "valid.yaml file and cluster-config.yaml file is merged into cluster-config-slurm.yaml"
        echo "Modified cluster-config-slurm.yaml with Tags"
-       pcluster create-cluster --cluster-name test-cluster-$scheduler --cluster-configuration cluster-config-slurm.yaml
+       pcluster create-cluster --cluster-name $CLUSTER_NAME --cluster-configuration cluster-config-slurm.yaml
 else
        echo "batch.yaml exists"
        yq -i ".Region=\"$Region\"" batch.yaml
@@ -52,9 +66,15 @@ else
        yq eval-all "select(fileIndex == 1) *+ select(fileIndex == 0)" valid.yaml batch.yaml >> cluster-config-batch.yaml
        echo "valid.yaml file and cluster-config.yaml file is merged into cluster-config-batch.yaml"
        echo "Modified cluster-config-batch.yaml with Tags"
-       pcluster create-cluster --cluster-name test-cluster-$scheduler --cluster-configuration cluster-config-batch.yaml
+       pcluster create-cluster --cluster-name $CLUSTER_NAME --cluster-configuration cluster-config-batch.yaml
        
 fi
-source ./wait-stack-create.sh
-wait_stack_create test-cluster-$scheduler $Region
+
+wait_stack_create $CLUSTER_NAME $Region
+HEAD_INSTANCE_ID=`pcluster describe-cluster -n $1 --query headNode.instanceId`
+# PRIVATE_IP_ADDRESS=`pcluster describe-cluster -n $1 --query headNode.privateIpAddress`
+PARAMETER_NAME="/rg/pcluster/headnode-instance-id/${CLUSTER_NAME}"
+aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${HEAD_INSTANCE_ID}"
+echo "Instance id of the head node is stored on ${PARAMETER_NAME}"
+echo "Instance id is : ${HEAD_INSTANCE_ID}"
 
