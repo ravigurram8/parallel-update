@@ -70,8 +70,8 @@ else
        
 fi
 
-wait_stack_create $CLUSTER_NAME $Region
-HEAD_INSTANCE_ID=`pcluster describe-cluster -n $CLUSTER_NAME --query headNode.instanceId`
+wait_stack_create $CLUSTER_NAME $REGION
+HEAD_INSTANCE_ID=`pcluster describe-cluster -n $CLUSTER_NAME -r $REGION --query headNode.instanceId`
 # PRIVATE_IP_ADDRESS=`pcluster describe-cluster -n $1 --query headNode.privateIpAddress`
 PARAMETER_NAME="/rg/pcluster/headnode-instance-id/${CLUSTER_NAME}"
 aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${HEAD_INSTANCE_ID}"
