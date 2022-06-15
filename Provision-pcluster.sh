@@ -1,5 +1,5 @@
 #!/bin/bash
-source /home/ubuntu/apc-ve/bin/activate
+source ~/apc-ve/bin/activate
 echo "Activated Virtual Environment"
 echo "Retrieving Tags from Running Instance"
 INSTANCE_ID=`wget -qO- http://instance-data/latest/meta-data/instance-id`
@@ -55,6 +55,6 @@ else
        pcluster create-cluster --cluster-name test-cluster-$scheduler --cluster-configuration cluster-config-batch.yaml
        
 fi
-source ./wait_stack_create.sh
+source ./wait-stack-create.sh
 wait_stack_create test-cluster-$scheduler $Region
 
