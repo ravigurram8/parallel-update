@@ -11,7 +11,7 @@ function wait_stack_create() {
         /opt/aws/bin/cfn-signal --exit-code 1 --resource EC2Instance --region ${AWS::Region} --stack ${AWS::StackName}   
     fi
 }
-source ~/apc-ve/bin/activate
+source /home/ec2-user/apc-ve/bin/activate
 echo "Activated Virtual Environment"
 echo "Retrieving Tags from Running Instance"
 INSTANCE_ID=`wget -qO- http://instance-data/latest/meta-data/instance-id`
