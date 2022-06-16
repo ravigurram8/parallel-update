@@ -1,14 +1,19 @@
 #!/bin/bash
+launcherstackname=${12}
+Region=$2
+trap '/opt/aws/bin/cfn-signal --exit-code 1 --resource EC2Instance --region ${Region} --stack ${launcherstackname}' ERR
 function wait_stack_create() {
-    STACK_NAME=$1
-    REGION=$2
-    echo "Waiting for [$STACK_NAME] stack creation."
-    aws cloudformation wait stack-create-complete --region ${REGION} --stack-name ${STACK_NAME}
+    CLUSTER_STACK_NAME=$1
+    LAUNCHER_STACK_NAME=$2
+    REGION=$3
+    echo "Waiting for [$CLUSTER_STACK_NAME] stack creation."
+    aws cloudformation wait stack-create-complete --region ${REGION} --stack-name ${CLUSTER_STACK_NAME}
     status=$?
     if [[ ${status} -ne 0 ]] ; then
         # Waiter encountered a failure state.
-        echo "Stack [${STACK_NAME}] creation failed. AWS error code is ${status}."
-        /opt/aws/bin/cfn-signal --exit-code 1 --resource EC2Instance --region ${AWS::Region} --stack ${AWS::StackName}   
+        echo "Stack [${CLUSTER_STACK_NAME}] creation failed. AWS error code is ${status}."
+        /opt/aws/bin/cfn-signal --exit-code 1 --resource EC2Instance --region ${REGION} --stack ${LAUNCHER_STACK_NAME}
+        exit 1  
     fi
 }
 source /home/ec2-user/apc-ve/bin/activate
@@ -70,11 +75,11 @@ else
        
 fi
 
-wait_stack_create $CLUSTER_NAME $REGION
-HEAD_INSTANCE_ID=`pcluster describe-cluster -n $CLUSTER_NAME -r $REGION --query headNode.instanceId`
+wait_stack_create $CLUSTER_NAME $launcherstackname $REGION
+HEAD_INSTANCE_ID=`pcluster describe-cluster -n $CLUSTER_NAME -r $REGION --query headNode | jq -r '.instanceId'`
 # PRIVATE_IP_ADDRESS=`pcluster describe-cluster -n $1 --query headNode.privateIpAddress`
 PARAMETER_NAME="/rg/pcluster/headnode-instance-id/${CLUSTER_NAME}"
-aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${HEAD_INSTANCE_ID}"
+aws ssm put-parameter --name "${PARAMETER_NAME}" --type "String" --value "${HEAD_INSTANCE_ID}" --region $REGION --overwrite
 echo "Instance id of the head node is stored on ${PARAMETER_NAME}"
 echo "Instance id is : ${HEAD_INSTANCE_ID}"
 
