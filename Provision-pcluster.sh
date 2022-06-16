@@ -16,7 +16,7 @@ function wait_stack_create() {
         exit 1  
     fi
 }
-source /home/ec2-user/apc-ve/bin/activate
+source ~/apc-ve/bin/activate
 echo "Activated Virtual Environment"
 echo "Retrieving Tags from Running Instance"
 INSTANCE_ID=`wget -qO- http://instance-data/latest/meta-data/instance-id`
