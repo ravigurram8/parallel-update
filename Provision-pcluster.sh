@@ -40,8 +40,14 @@ maxvpc=$8
 computenodesubnetId=$9
 desiredvpc=${10}
 spotbid=${11}
+CustomAMI=${13}
+IFS='-' read -ra TRIMMED <<< "$CustomAMI"
+CustomAMIStartsWith=${TRIMMED[0]}
 if [ "$scheduler" == "slurm" ]; then
        echo "slurm.yaml exists"
+       if [ "$CustomAMIStartsWith" == "ami"]; then
+          yq -i ".Image.CustomAmi=\"$CustomAMI\"" slurm.yaml
+       fi
        yq -i ".Region=\"$Region\"" slurm.yaml
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" slurm.yaml
        yq -i ".HeadNode.Networking.SubnetId=\"$headnodesubnetId\"" slurm.yaml
@@ -57,6 +63,9 @@ if [ "$scheduler" == "slurm" ]; then
        pcluster create-cluster --cluster-name $CLUSTER_NAME --cluster-configuration cluster-config-slurm.yaml
 else
        echo "batch.yaml exists"
+       if [ "$CustomAMIStartsWith" == "ami"]; then
+            yq -i ".Image.CustomAmi=\"$CustomAMI\"" slurm.yaml
+       fi
        yq -i ".Region=\"$Region\"" batch.yaml
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" batch.yaml
        yq -i ".HeadNode.Networking.SubnetId=\"$headnodesubnetId\"" batch.yaml

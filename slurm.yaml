@@ -1,6 +1,7 @@
 Region: 
 Image:
   Os: alinux2
+  CustomAmi:
 HeadNode:
   InstanceType: 
   Networking:
