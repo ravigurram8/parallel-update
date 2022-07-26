@@ -45,7 +45,7 @@ IFS='-' read -ra TRIMMED <<< "$CustomAMI"
 CustomAMIStartsWith=${TRIMMED[0]}
 if [ "$scheduler" == "slurm" ]; then
        echo "slurm.yaml exists"
-       if [ "$CustomAMIStartsWith" == "ami"]; then
+       if [ "$CustomAMIStartsWith" == "ami" ]; then
           yq -i ".Image.CustomAmi=\"$CustomAMI\"" slurm.yaml
        fi
        yq -i ".Region=\"$Region\"" slurm.yaml
@@ -63,7 +63,7 @@ if [ "$scheduler" == "slurm" ]; then
        pcluster create-cluster --cluster-name $CLUSTER_NAME --cluster-configuration cluster-config-slurm.yaml
 else
        echo "batch.yaml exists"
-       if [ "$CustomAMIStartsWith" == "ami"]; then
+       if [ "$CustomAMIStartsWith" == "ami" ]; then
             yq -i ".Image.CustomAmi=\"$CustomAMI\"" slurm.yaml
        fi
        yq -i ".Region=\"$Region\"" batch.yaml
