@@ -63,8 +63,8 @@ if [ "$scheduler" == "slurm" ]; then
        pcluster create-cluster --cluster-name $CLUSTER_NAME --cluster-configuration cluster-config-slurm.yaml
 else
        echo "batch.yaml exists"
-       if [ "$CustomAMIStartsWith" == "ami" ]; then
-            yq -i ".Image.CustomAmi=\"$CustomAMI\"" slurm.yaml
+        if [ "$CustomAMIStartsWith" == "ami" ]; then
+            yq -i ".Image.CustomAmi=\"$CustomAMI\"" batch.yaml
        fi
        yq -i ".Region=\"$Region\"" batch.yaml
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" batch.yaml
