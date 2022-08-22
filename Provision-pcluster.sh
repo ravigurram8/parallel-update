@@ -41,12 +41,16 @@ computenodesubnetId=$9
 desiredvpc=${10}
 spotbid=${11}
 CustomAMI=${13}
+FileSystemId=${14}
 IFS='-' read -ra TRIMMED <<< "$CustomAMI"
 CustomAMIStartsWith=${TRIMMED[0]}
 if [ "$scheduler" == "slurm" ]; then
        echo "slurm.yaml exists"
        if [ "$CustomAMIStartsWith" == "ami" ]; then
           yq -i ".Image.CustomAmi=\"$CustomAMI\"" slurm.yaml
+       fi
+       if [ "$FileSystemId" != "default" ]; then
+          yq -i '.SharedStorage=[{"MountDir": "/fsx", "Name":"RG_Filesysytem", "StorageType": "FsxLustre", "FsxLustreSettings":{"FileSystemId":"'$FileSystemId'"}}]' slurm.yaml
        fi
        yq -i ".Region=\"$Region\"" slurm.yaml
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" slurm.yaml
@@ -65,6 +69,9 @@ else
        echo "batch.yaml exists"
         if [ "$CustomAMIStartsWith" == "ami" ]; then
             yq -i ".Image.CustomAmi=\"$CustomAMI\"" batch.yaml
+       fi
+       if [ "$FileSystemId" != "default" ]; then
+          yq -i '.SharedStorage=[{"MountDir": "/fsx", "Name":"RG_Filesysytem", "StorageType": "FsxLustre", "FsxLustreSettings":{"FileSystemId":"'$FileSystemId'"}}]' batch.yaml
        fi
        yq -i ".Region=\"$Region\"" batch.yaml
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" batch.yaml
