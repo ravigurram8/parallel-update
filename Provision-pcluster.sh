@@ -42,6 +42,7 @@ desiredvpc=${10}
 spotbid=${11}
 CustomAMI=${13}
 FileSystemId=${14}
+QueueCapacityType=${15}
 IFS='-' read -ra TRIMMED <<< "$CustomAMI"
 CustomAMIStartsWith=${TRIMMED[0]}
 if [ "$scheduler" == "slurm" ]; then
@@ -56,6 +57,7 @@ if [ "$scheduler" == "slurm" ]; then
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" slurm.yaml
        yq -i ".HeadNode.Networking.SubnetId=\"$headnodesubnetId\"" slurm.yaml
        yq -i ".HeadNode.Ssh.KeyName=\"$keyname\"" slurm.yaml
+       yq -i ".Scheduling.SlurmQueues[0].CapacityType=\"$QueueCapacityType\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].InstanceType=\"$computenodeinstancetype\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MinCount=\"$minvpc\"" slurm.yaml
        yq -i ".Scheduling.SlurmQueues[0].ComputeResources[0].MaxCount=\"$maxvpc\"" slurm.yaml
@@ -77,6 +79,7 @@ else
        yq -i ".HeadNode.InstanceType=\"$headnodeinstancetype\"" batch.yaml
        yq -i ".HeadNode.Networking.SubnetId=\"$headnodesubnetId\"" batch.yaml
        yq -i ".HeadNode.Ssh.KeyName=\"$keyname\"" batch.yaml
+       yq -i ".Scheduling.AwsBatchQueues[0].CapacityType=\"$QueueCapacityType\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].InstanceTypes[0]=\"$computenodeinstancetype\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MinvCpus=\"$minvpc\"" batch.yaml
        yq -i ".Scheduling.AwsBatchQueues[0].ComputeResources[0].MaxvCpus=\"$maxvpc\"" batch.yaml
