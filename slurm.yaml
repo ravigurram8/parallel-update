@@ -7,6 +7,12 @@ HeadNode:
     SubnetId: 
   Ssh:
     KeyName: 
+  Dcv:
+    Enabled: true  
+  Iam:
+    S3Access:
+      - EnableWriteAccess: true
+        BucketName: '*'  
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
@@ -20,3 +26,7 @@ Scheduling:
     Networking:
       SubnetIds:
       - 
+    Iam:
+      S3Access:
+        - EnableWriteAccess: true
+          BucketName: '*'
