@@ -31,7 +31,3 @@ Scheduling:
       Networking:
         SubnetIds:
         - 
-      Iam:
-        S3Access:
-         - EnableWriteAccess: true
-           BucketName: '*'
