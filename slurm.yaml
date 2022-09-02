@@ -13,6 +13,9 @@ HeadNode:
     S3Access:
       - EnableWriteAccess: true
         BucketName: '*'  
+  CustomActions:
+    OnNodeStart:
+      Script: s3://cft-template-5/bootstrap-scripts/pcluster-on-node-start.sh        
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
