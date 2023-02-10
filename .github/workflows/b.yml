@@ -8,7 +8,7 @@ jobs:
     steps:
       -
         name: Say Hello
-        run: echo "Hello world!ravikumar"
+        run: echo "Hello world!Research Gateway"
       -
         name: Do stuff
         run: |
