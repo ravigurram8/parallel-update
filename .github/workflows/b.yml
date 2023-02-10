@@ -1,20 +1,14 @@
-name: hello-world-example
+name: test-feb10
 on:
-  pull_request_review:
-    types: [submitted]
-
+  push:
+    branches: ['main']
 jobs:
-  approved:
-    if: github.event.review.state == 'approved'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "This PR was approved"
   say-hello:
     runs-on: ubuntu-latest
     steps:
       -
         name: Say Hello
-        run: echo "Hello world RG!"
+        run: echo "Hello world!ravi"
       -
         name: Do stuff
         run: |
@@ -24,3 +18,4 @@ jobs:
       -
         name: Say Goodbye
         run: echo "Goodbye!"
+
